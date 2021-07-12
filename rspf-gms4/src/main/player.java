@@ -31,12 +31,12 @@ public class player {
 
 	//thread 1: adicionar música à lista
 
-	class addThread extends Thread {
+	class addRunnable extends Thread {
 		String title;
 		String length;
 
 		//construtor
-		public addThread(String title, String length) {
+		public addRunnable(String title, String length) {
 			this.length = length;
 			this.title = title;
 		}
@@ -65,11 +65,11 @@ public class player {
 
 	//thread 2: remoção, que é bem parecida com a thread de adicionar
 
-	class removeThread extends Thread {
+	class removeRunnable extends Thread {
 		int mscPos; //pra remover, procuraremos a música pela posição
 
 		//construtor
-		public removeThread (int removeMsc) {
+		public removeRunnable (int removeMsc) {
 			this.mscPos = removeMsc;
 		}
 
@@ -95,7 +95,7 @@ public class player {
 
 	//thread 3: list, pra mostrar quais músicas estão no player
 
-	public class list extends Thread {
+	public class listRunnable extends Thread {
 
 		public void run() {
 			try {
@@ -121,13 +121,12 @@ public class player {
 	}
 
 	public void initAdd(String msc, String length) {
-		Thread add = new Thread(new addThread(msc, length));
+		Thread add = new Thread(new addRunnable(msc, length));
 		add.start();
-		//new addThread(msc, length).start();
 	}
 
 	public void initRemove(int pos) {
-		Thread remove = new Thread(new removeThread(pos));
+		Thread remove = new Thread(new removeRunnable(pos));
 		remove.start();
 	}
 

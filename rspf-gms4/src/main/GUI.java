@@ -19,7 +19,7 @@ public class GUI extends player implements ActionListener, ListSelectionListener
 
 	private JButton addButton;
 	private JButton removeButton;
-	private JList setlist; //lista de músicas
+	private JList<String> setlist; //lista de músicas
 	private JFrame front; //interação com o usuário
 	int mscPos; int mscLength;
 
@@ -39,7 +39,7 @@ public class GUI extends player implements ActionListener, ListSelectionListener
 		removeButton.setActionCommand("remove");
 		removeButton.setBounds(30, 120, 80, 40);
 
-		setlist = new JList();
+		setlist = new JList<String>();
 		setlist.setModel(playlist);
 		setlist.addListSelectionListener(this);
 
