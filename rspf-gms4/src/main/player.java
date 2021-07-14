@@ -25,7 +25,7 @@ public class player {
 
 	public Lock lock = new ReentrantLock();
 	public boolean taken = false; //outra thread "pegou" a lista por enquanto
-	public DefaultListModel<String> lengthlist = new DefaultListModel<>();
+	//public DefaultListModel<String> lengthlist = new DefaultListModel<>();
 	public DefaultListModel<String> playlist = new DefaultListModel<>();
 	public Condition action = lock.newCondition();
 
@@ -33,11 +33,11 @@ public class player {
 
 	class addRunnable extends Thread {
 		String title;
-		String length;
+		//String length;
 
 		//construtor
-		public addRunnable(String title, String length) {
-			this.length = length;
+		public addRunnable(String title/*, String length*/) {
+			//this.length = length;
 			this.title = title;
 		}
 
@@ -50,7 +50,7 @@ public class player {
 
 				taken = true; //lista em uso no processo de adição
 				playlist.addElement(this.title);
-				lengthlist.addElement(this.length);
+				//lengthlist.addElement(this.length);
 				taken = false; //acabou operação
 				action.signalAll(); //agora podemos liberar todas as threads na espera, além de liberar o lock
 
@@ -81,7 +81,7 @@ public class player {
 
 				taken = true;
 				playlist.remove(this.mscPos);
-				lengthlist.remove(this.mscPos);
+				//lengthlist.remove(this.mscPos);
 				taken = false;
 				action.signalAll();
 			} catch (InterruptedException e) {
@@ -120,8 +120,8 @@ public class player {
 		}
 	}
 
-	public void initAdd(String msc, String length) {
-		Thread add = new Thread(new addRunnable(msc, length));
+	public void initAdd(String msc/*, String length*/) {
+		Thread add = new Thread(new addRunnable(msc/*, length*/));
 		add.start();
 	}
 
