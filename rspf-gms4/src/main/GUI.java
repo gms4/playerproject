@@ -19,12 +19,12 @@ import javax.swing.event.ListSelectionListener;
 
 public class GUI extends player implements ActionListener, ListSelectionListener, WindowConstants {
 
-	private JButton addButton, removeButton, pauseButton, playButton, nextButton, previousButton;
+	private JButton addButton, removeButton, /*pauseButton,*/ playpauseButton, nextButton, previousButton;
 	private JList<String> setlist; //lista de músicas
 	private JFrame front; //interação com o usuário
 	private JLabel current/*, time, length*/;
 	int mscPos, mscLength;
-	boolean isPlaying = false;
+	boolean paused = true;
 
 	/* Setando aqui os botões necessários e 
 	 * estruturas básicas pra o front funcionar
@@ -41,32 +41,32 @@ public class GUI extends player implements ActionListener, ListSelectionListener
 		removeButton.addActionListener(this);
 		removeButton.setActionCommand("remove");
 		removeButton.setBounds(30, 290, 80, 40);
-		
+
 		nextButton = new JButton("=>");
 		nextButton.addActionListener(this);
 		nextButton.setActionCommand("next");
 		nextButton.setBounds(445, 100, 80, 40);
-		
+
 		previousButton = new JButton("<=");
 		previousButton.addActionListener(this);
 		previousButton.setActionCommand("previous");
 		previousButton.setBounds(30, 100, 80, 40);
-		
-		pauseButton = new JButton("||");
-		pauseButton.addActionListener(this);
-		pauseButton.setActionCommand("pause");
-		pauseButton.setBounds(225, 100, 50, 40);
-		
-		playButton = new JButton(">>");
+
+		playpauseButton = new JButton(">>");
+		playpauseButton.addActionListener(this);
+		playpauseButton.setActionCommand("play/pause");
+		playpauseButton.setBounds(240, 100, 50, 40);
+
+		/*playButton = new JButton(">>");
 		playButton.addActionListener(this);
 		playButton.setActionCommand("play");
-		playButton.setBounds(275, 100, 50, 40);
+		playButton.setBounds(275, 100, 50, 40);*/
 
 		setlist = new JList<String>();
 		setlist.setModel(playlist);
 		setlist.addListSelectionListener(this);
 
-		current = new JLabel("YOU'RE LISTENING TO: NOTHING AT THE MOMENT.");
+		current = new JLabel("You're listening to: nothing at the moment.");
 		current.setBounds(150, 40, 420, 25);
 
 		//possibilidade de ver as músicas com scrolling
@@ -80,7 +80,7 @@ public class GUI extends player implements ActionListener, ListSelectionListener
 		layout.add(addButton);
 		layout.add(removeButton);
 		layout.add(set);*/
-		
+
 		//testei panel e table, ainda decidindo qual vou usar
 
 		JTable layout = new JTable();
@@ -90,8 +90,8 @@ public class GUI extends player implements ActionListener, ListSelectionListener
 		layout.add(set);
 		layout.add(nextButton);
 		layout.add(previousButton);
-		layout.add(pauseButton);
-		layout.add(playButton);
+		layout.add(playpauseButton);
+		//layout.add(playButton);
 		layout.add(current);
 		//Color c = new Color(0, 60, 0);
 		//layout.setBackground(c);
@@ -136,8 +136,26 @@ public class GUI extends player implements ActionListener, ListSelectionListener
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
 				}
-				
-				current.setText("YOU'RE LISTENING: NOTHING AT THE MOMENT.");
+
+				current.setText("You're listening to: nothing at the moment.");
+			}
+		} else if (action.equals("next")) {
+			if(isntEmpty()) {
+
+			}
+		} else if (action.equals("previous")) {
+
+		} else if (action.equals("play/pause")) {
+			
+			if (isntEmpty() && setlist.getSelectedIndex() == mscPos); {
+				paused = !paused;
+				if (paused) {
+					current.setText(playlist.get(mscPos) + " is paused.");
+					playpauseButton.setText(">>");
+				} else {
+					current.setText("You're listening to: " + playlist.get(mscPos));
+					playpauseButton.setText("||");
+				}
 			}
 		}
 	}
@@ -152,18 +170,18 @@ public class GUI extends player implements ActionListener, ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
 		// TODO Auto-generated method stub
-        if (isntEmpty()) {
-        	mscPos = setlist.getSelectedIndex();
-        }
+		if (isntEmpty()) {
+			mscPos = setlist.getSelectedIndex();
+		}
 	}
-	
-	public void start() {
-		
-		isPlaying = true;
-		current.setText("YOU'RE LISTENING TO: " + playlist.get(mscPos));
-		
-	}
-	
+
+	/*public void start() {
+
+		paused = false;
+		current.setText("You're listening to: " + playlist.get(mscPos));
+
+	}*/
+
 	public void select() { setlist.setSelectedIndex(mscPos); }
 }
 
