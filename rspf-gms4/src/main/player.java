@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -21,23 +23,23 @@ public class player {
 	 * add (done)
 	 * remove (done)
 	 * listar pra mostrar que add e remove funcionam (done)
+	 * play/pause (done)
 	 */
 
 	public Lock lock = new ReentrantLock();
 	public boolean taken = false; //outra thread "pegou" a lista por enquanto
-	//public DefaultListModel<String> lengthlist = new DefaultListModel<>();
+	public int position = 0;
 	public DefaultListModel<String> playlist = new DefaultListModel<>();
+	public List<Integer> mscPosOrder = new ArrayList<>(); //listar pra guardar as posições (next/previous)
 	public Condition action = lock.newCondition();
 
 	//thread 1: adicionar música à lista
 
 	class addRunnable extends Thread {
 		String title;
-		//String length;
 
 		//construtor
-		public addRunnable(String title/*, String length*/) {
-			//this.length = length;
+		public addRunnable(String title) {
 			this.title = title;
 		}
 
@@ -50,7 +52,7 @@ public class player {
 
 				taken = true; //lista em uso no processo de adição
 				playlist.addElement(this.title);
-				//lengthlist.addElement(this.length);
+				mscPosOrder.add(playlist.getSize() - 1);
 				taken = false; //acabou operação
 				action.signalAll(); //agora podemos liberar todas as threads na espera, além de liberar o lock
 
@@ -81,7 +83,6 @@ public class player {
 
 				taken = true;
 				playlist.remove(this.mscPos);
-				//lengthlist.remove(this.mscPos);
 				taken = false;
 				action.signalAll();
 			} catch (InterruptedException e) {
@@ -93,22 +94,24 @@ public class player {
 		}
 	}
 
-	//thread 3: list, pra mostrar quais músicas estão no player
-
-	public class listRunnable extends Thread {
-
-		public void run() {
+	//thread 3: thread que capta a posição da música para fazer o next and previous
+	//ela funciona como thread mas eu quero o id atualizado no return
+	public int mscPosRunnable (boolean aux, int index) {
+		
 			try {
+				
 				lock.lock();
-
+				
 				while (taken) action.await();
 
 				taken = true;
-
-				for (int i = 0; i < playlist.size(); i++) { //passar pela lista imprimindo as músicas
-					System.out.println(playlist.get(i));
+				
+				if (aux) {
+					position = mscPosOrder.indexOf(index);
+				} else {
+					position = (position + mscPosOrder.size() + index) % mscPosOrder.size();
 				}
-
+				
 				taken = false;
 				action.signalAll();
 			} catch (InterruptedException e) {
@@ -117,11 +120,12 @@ public class player {
 			} finally {
 				lock.unlock();
 			}
+			
+			return mscPosOrder.get(position);
 		}
-	}
 
-	public void initAdd(String msc/*, String length*/) {
-		Thread add = new Thread(new addRunnable(msc/*, length*/));
+	public void initAdd(String msc) {
+		Thread add = new Thread(new addRunnable(msc));
 		add.start();
 	}
 
@@ -129,7 +133,6 @@ public class player {
 		Thread remove = new Thread(new removeRunnable(pos));
 		remove.start();
 	}
-
 
 }
 
