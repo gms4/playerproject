@@ -35,11 +35,11 @@ public class player {
 
 	//thread 1: adicionar música à lista
 
-	class addRunnable extends Thread {
+	class addThread extends Thread {
 		String title;
 
 		//construtor
-		public addRunnable(String title) {
+		public addThread(String title) {
 			this.title = title;
 		}
 
@@ -67,11 +67,11 @@ public class player {
 
 	//thread 2: remoção, que é bem parecida com a thread de adicionar
 
-	class removeRunnable extends Thread {
+	class removeThread extends Thread {
 		int mscPos; //pra remover, procuraremos a música pela posição
 
 		//construtor
-		public removeRunnable (int removeMsc) {
+		public removeThread (int removeMsc) {
 			this.mscPos = removeMsc;
 		}
 
@@ -96,7 +96,7 @@ public class player {
 
 	//thread 3: thread que capta a posição da música para fazer o next and previous
 	//ela funciona como thread mas eu quero o id atualizado no return
-	public int mscPosRunnable (boolean aux, int index) {
+	public int positionThread (boolean aux, int index) {
 		
 			try {
 				
@@ -125,14 +125,14 @@ public class player {
 		}
 
 	public void initAdd(String msc) {
-		Thread add = new Thread(new addRunnable(msc));
+		Thread add = new Thread(new addThread(msc));
 		add.start();
 	}
 
 	public void initRemove(int pos) {
-		Thread remove = new Thread(new removeRunnable(pos));
+		Thread remove = new Thread(new removeThread(pos));
 		remove.start();
 	}
-
+	
 }
 

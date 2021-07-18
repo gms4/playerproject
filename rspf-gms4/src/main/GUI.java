@@ -131,11 +131,11 @@ public class GUI extends player implements ActionListener, ListSelectionListener
 			if(isntEmpty()) {
 				initRemove(mscPos);
 				//coloquei a thread pra esperar um pouco depois da exclusão
-				try {
+				/*try {
 					Thread.sleep(2);
 				} catch (InterruptedException ie) {
 					ie.printStackTrace();
-				}
+				}*/
 
 				current.setText("You're listening to: nothing at the moment.");
 			}
@@ -143,12 +143,12 @@ public class GUI extends player implements ActionListener, ListSelectionListener
 			//o next e o previous funciona como uma função normal de previous e next de uma linked list
 		} else if (action.equals("next")) {
 			if(isntEmpty()) {
-				mscPos = mscPosRunnable(false, 1);
+				mscPos = positionThread(false, 1);
 				select();
 			}
 		} else if (action.equals("previous")) {
 			if(isntEmpty()) {
-				mscPos = mscPosRunnable(false, -1);
+				mscPos = positionThread(false, -1);
 				select();
 			}
 		} else if (action.equals("play/pause")) {
@@ -178,7 +178,7 @@ public class GUI extends player implements ActionListener, ListSelectionListener
 		// TODO Auto-generated method stub
 		if (isntEmpty()) {
 			mscPos = setlist.getSelectedIndex();
-			mscPosRunnable(true, mscPos);
+			positionThread(true, mscPos);
 			startMusic();
 		}
 	}
