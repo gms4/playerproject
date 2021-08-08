@@ -168,7 +168,7 @@ public class player {
 					Collections.shuffle(mscPosOrder);
 				}
 				
-				//printando pra provar o aleatório
+				//printando pra provar o funcionamento
 				System.out.println(mscPosOrder);
 				
 				taken = false;
