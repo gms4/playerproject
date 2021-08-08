@@ -168,7 +168,7 @@ public class player {
 					Collections.shuffle(mscPosOrder);
 				}
 				
-				//em qualquer uma das ocasiões, vamos listar a playlist novamente
+				//printando pra provar o aleatório
 				System.out.println(mscPosOrder);
 				
 				taken = false;
